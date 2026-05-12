@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
+    <link rel="stylesheet" href="prac3.css">
+    
 </head>
 <body>
     <marquee>Welcome to our Registration Form</marquee>
-    <h1>Registration Form</h1><image src="profile.png" alt="Profile photo" height="100" width="100"></image>
+    <h1>Registration Form</h1><img src="profile.png" alt="Profile photo" height="100" width="100">
     <form action="" method="post">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name" required><br><br>
@@ -18,7 +20,7 @@
         <label for="password">Password:</label><br>
         <input type="password" id="password" name="password" required><br><br>
 
-        <hyperlink href="https://www.linkedin.com/" target="_blank">Visit Linkedin</hyperlink><br><br>
+        <a href="https://www.linkedin.com/" target="_blank">Visit Linkedin</a><br><br>
 
         <label for="contactno">Contact Number:</label><br>
         <input type="tel" id="contactno" name="contactno" required><br><br>
@@ -61,8 +63,8 @@
         <button type="submit">Submit</button>
     </form>
 
-    <video src="C:\Users\PAL\Videos\Captures\intership project - Designs - Google Chrome 2025-02-19 16-06-02.mp4" controls width="200" height="150"></video>
+    <!-- <video src="C:\Users\PAL\Videos\Captures\intership project - Designs - Google Chrome 2025-02-19 16-06-02.mp4" controls width="200" height="150"></video>
     <audio src="C:\Users\PAL\Music\intership project - Designs - Google Chrome 2025-02-19 16-06-02.mp4" controls></audio>
-    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" width="560" height="315" frameborder="0" allowfullscreen></iframe> -->
 </body>
 </html>
