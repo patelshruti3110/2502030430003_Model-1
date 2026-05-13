@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gray Layout</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background: #eef3f8;
+    color: #333;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    background: linear-gradient(to right, #7f9db9, #9fb7cc);
+    color: white;
+    text-align: center;
+    padding: 25px;
+
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+header h1 {
+    font-size: 31px;
+    letter-spacing: 1px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main Layout */
+main {
+    flex: 1;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+
+    gap: 20px;
+    padding: 30px;
+}
+
+/* Main Content */
+main p:first-child {
+    background: linear-gradient(to right, #d7e4f0, #edf4fa);
+    padding: 25px;
+    height: 527px;
+
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+
+    line-height: 1.8;
+    font-size: 27px;
+
+    color: #4a5c6d;
+}
+
+/* Sidebar Container */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Technology Cards */
+.tech-box {
+    background: linear-gradient(to right, #d7e4f0, #edf4fa);
+
+    padding: 20px;
+    height: 160px;
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    color: #49657d;
+
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+
+    transition: 0.3s;
+}
+
+/* Hover Effect */
+.tech-box:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(to right, #b9d0e4, #dbe9f4);
+}
+
+/* Footer */
+footer {
+    background: #7f9db9;
+    color: white;
+
+    text-align: center;
+    padding: 18px;
+
+    font-size: 20px;
+}
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Header</h1>
+    </header>
+    <main>
+
+    <!-- Main Content -->
+    <div class="content">
+        <p>
+            Content
+        </p>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="sidebar">
+
+        <div class="tech-box">HTML</div>
+
+        <div class="tech-box">CSS</div>
+
+        <div class="tech-box">JavaScript</div>
+
+    </div>
+
+</main>
+    <footer>
+        <p>Footer</p>
+    </footer>
+</body>
+
+</html>
