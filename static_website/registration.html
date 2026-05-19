@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hirely-Sign Up</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1100px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 60px;
+            color: #7d98b7;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .signup-box {
+            background: #fff;
+            border-radius: 30px;
+            padding: 50px;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .left-section {
+            width: 50%;
+            text-align: left;
+        }
+
+        .right-section {
+            width: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 28px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .input-box {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+        }
+
+        .input-box i {
+            margin-right: 10px;
+            color: #444;
+        }
+
+        .input-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            background: transparent;
+        }
+
+        .otp-btn {
+            margin-top: 10px;
+            padding: 6px 25px;
+            border: none;
+            border-radius: 20px;
+            background: #aac1d1;
+            cursor: pointer;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .password-toggle {
+            cursor: pointer;
+        }
+
+        .role-section {
+            margin-top: 20px;
+        }
+
+        .role-options {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+        }
+
+        .signup-btn {
+            margin-top: 25px;
+            width: 180px;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: #aac1d1;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .divider {
+            width: 1px;
+            background: #999;
+        }
+
+        .social-title {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .social-btn {
+            border: 2px solid #aac1d1;
+            border-radius: 30px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            background: white;
+            font-size: 15px;
+        }
+
+        .login-link {
+            margin-top: 10px;
+            font-size: 15px;
+        }
+
+        .login-link a {
+            text-decoration: none;
+            color: #7d98b7;
+            font-weight: bold;
+        }
+
+        /* Popup */
+        .popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: none;
+            animation: slide 0.5s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slide {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .signup-box {
+                flex-direction: column;
+            }
+
+            .left-section,
+            .right-section {
+                width: 100%;
+            }
+
+            .divider {
+                width: 100%;
+                height: 1px;
+            }
+
+            .social-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="popup" id="popupMessage">
+        Registration Successful!
+    </div>
+
+    <div class="main-container">
+
+        <h1 class="logo">Hirely.</h1>
+
+        <div class="signup-box">
+
+            <!-- LEFT SECTION -->
+            <div class="left-section">
+
+                <h2 class="title">Sign-up</h2>
+
+                <form id="signupForm">
+
+                    <!-- Full Name -->
+                    <div class="input-group">
+                        <label>Full name</label>
+                        <div class="input-box">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" id="fullname" placeholder="Enter full name">
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <div class="input-box">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input type="email" id="email" placeholder="Enter email">
+                        </div>
+
+                        <button type="button" class="otp-btn">OTP</button>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="input-group">
+                        <label>Contact number</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="text" id="phone" placeholder="Enter mobile number">
+                        </div>
+
+                        <button type="button" class="otp-btn">OTP</button>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group">
+                        <label>Password</label>
+
+                        <div class="input-box">
+                            <i class="fa-solid fa-key"></i>
+
+                            <input type="password" id="password" placeholder="Enter password">
+
+                            <i class="fa-regular fa-eye password-toggle" id="togglePassword"></i>
+                        </div>
+                    </div>
+
+                    <!-- Role -->
+                    <div class="role-section">
+                        <label>Role</label>
+
+                        <div class="role-options">
+                            <label>
+                                <input type="radio" name="role" value="Company">
+                                Company
+                            </label>
+
+                            <label>
+                                <input type="radio" name="role" value="Employee">
+                                Employee
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="signup-btn">
+                        SIGN-UP
+                    </button>
+
+                </form>
+            </div>
+
+            <!-- DIVIDER -->
+            <div class="divider"></div>
+
+            <!-- RIGHT SECTION -->
+            <div class="right-section">
+
+                <h3 class="social-title">Sign-up with</h3>
+
+                <div class="social-buttons">
+
+                    <button class="social-btn">
+                        <i class="fa-brands fa-google"></i>
+                        Google
+                    </button>
+
+                    <button class="social-btn">
+                        <i class="fa-brands fa-linkedin"></i>
+                        LinkedIn
+                    </button>
+
+                </div>
+
+                <div class="login-link">
+                    Already Register?
+                    <a href="login.html">Login here</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Password Show/Hide
+        const togglePassword = document.getElementById("togglePassword");
+        const password = document.getElementById("password");
+
+        togglePassword.addEventListener("click", () => {
+
+            if (password.type === "password") {
+                password.type = "text";
+                togglePassword.classList.remove("fa-eye");
+                togglePassword.classList.add("fa-eye-slash");
+            }
+            else {
+                password.type = "password";
+                togglePassword.classList.remove("fa-eye-slash");
+                togglePassword.classList.add("fa-eye");
+            }
+        });
+
+        // Form Validation
+        const form = document.getElementById("signupForm");
+
+        form.addEventListener("submit", function (e) {
+
+            e.preventDefault();
+
+            let fullname = document.getElementById("fullname").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let phone = document.getElementById("phone").value.trim();
+            let passwordValue = document.getElementById("password").value.trim();
+            let role = document.querySelector('input[name="role"]:checked');
+
+            // Name Validation
+            if (fullname === "") {
+                alert("Please enter full name");
+                return;
+            }
+
+            // Email Validation
+            let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+            if (!email.match(emailPattern)) {
+                alert("Please enter valid email address");
+                return;
+            }
+
+            // Phone Validation
+            let phonePattern = /^[0-9]{10}$/;
+
+            if (!phone.match(phonePattern)) {
+                alert("Please enter valid 10-digit mobile number");
+                return;
+            }
+
+            // Password Validation
+            if (passwordValue.length < 6) {
+                alert("Password must be at least 6 characters");
+                return;
+            }
+
+            // Role Validation
+            if (!role) {
+                alert("Please select role");
+                return;
+            }
+
+            // Success Popup
+            const popup = document.getElementById("popupMessage");
+
+            popup.style.display = "block";
+
+            setTimeout(() => {
+                popup.style.display = "none";
+                
+                // Redirect to Login Page
+                window.location.href = "./login.html";
+            }, 3000);
+
+            form.reset();
+        });
+    </script>
+
+</body>
+
+</html>

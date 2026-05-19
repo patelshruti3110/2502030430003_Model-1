@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hirely - Employee Profile</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #edf1f7;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+         .navbar {
+            width: 100%;
+            height: auto;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 60px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+        }
+
+        .logo img {
+            height: auto;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links li,
+        .nav-links a {
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #222;
+            text-decoration: none;
+        }
+
+        .nav-links li:hover,
+        .nav-links a:hover {
+            color: #6d89ab;
+            transition: 0.3s;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .auth-buttons button {
+            padding: 12px 28px;
+            border-radius: 25px;
+            border: 1px solid #6d89ab;
+            background: #a9c1d8;
+            color: #6d89ab;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .auth-buttons button:hover {
+            transform: translateY(-2px);
+            background: #87a6c4;
+            color: #fff;
+        }
+
+        .logout-btn {
+            width: auto;
+            height: auto;
+            border-radius: 25px;
+            border: 1px solid #6d89ab;
+            background: #a9c1d8;
+            color: #6d89ab;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 12px 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            background: #87a6c4;
+            color: #fff;
+        }
+
+
+    /* ================= DROPDOWN MENU STYLES ================= */
+        .nav-links li {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            margin-top: 15px;
+            min-width: 800px;
+            z-index: 999;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu.show {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .dropdown-menu.show.company-dropdown {
+            grid-template-columns: repeat(2, 1fr);
+            min-width: 500px;
+        }
+
+        .dropdown-column h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #6d89ab;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dropdown-column p {
+            font-size: 15px;
+            font-weight: 500;
+            color: #222;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            padding-left: 0;
+        }
+
+        .dropdown-column p:hover {
+            color: #6d89ab;
+            padding-left: 8px;
+        }
+
+        /* ================= MAIN CONTAINER ================= */
+        .main-container {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        /* ================= PROFILE HEADER SECTION ================= */
+        .profile-header {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a9c1d8 0%, #87a6c4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .profile-header-content {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 5px;
+        }
+
+        .profile-updated {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 25px;
+        }
+
+        .profile-details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .profile-detail {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            color: #555;
+        }
+
+        .profile-detail i {
+            color: #6d89ab;
+            font-size: 18px;
+            min-width: 20px;
+        }
+
+        .profile-detail-label {
+            font-weight: 600;
+            color: #222;
+        }
+
+        /* ================= PROFILE SECTIONS ================= */
+        .profile-sections-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e8ecf2;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .add-btn {
+            color: #a9c1d8;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            color: #6d89ab;
+        }
+
+        .section-description {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            padding: 20px;
+            background: #f8f9fb;
+            border-radius: 12px;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            border: 1px dashed #e0e6f2;
+        }
+
+        /* ================= SKILL ITEMS ================= */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .skill-item {
+            padding: 10px 18px;
+            background: #e8ecf2;
+            border-radius: 20px;
+            color: #6d89ab;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .skill-item i {
+            cursor: pointer;
+            opacity: 0;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .skill-item:hover {
+            background: #d8dce8;
+        }
+
+        .skill-item:hover i {
+            opacity: 1;
+        }
+
+        /* ================= PROJECT ITEM ================= */
+        .project-item {
+            padding: 20px;
+            background: #f8f9fb;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #a9c1d8;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .project-item:hover {
+            background: #eef2f9;
+            border-left-color: #6d89ab;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .project-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .project-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        /* ================= EDUCATION ITEM ================= */
+        .education-item {
+            padding: 20px;
+            background: #f8f9fb;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #a9c1d8;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .education-item:hover {
+            background: #eef2f9;
+            border-left-color: #6d89ab;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .education-degree {
+            font-size: 16px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 5px;
+        }
+
+        .education-institute {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .education-year {
+            font-size: 13px;
+            color: #999;
+        }
+
+        /* ================= RESUME SECTION ================= */
+        .resume-upload-area {
+            border: 2px dashed #a9c1d8;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #f8f9fb;
+        }
+
+        .resume-upload-area:hover {
+            border-color: #6d89ab;
+            background: #eef2f9;
+        }
+
+        .resume-upload-icon {
+            font-size: 40px;
+            color: #a9c1d8;
+            margin-bottom: 15px;
+        }
+
+        .resume-upload-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 5px;
+        }
+
+        .resume-upload-hint {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .resume-file-input {
+            display: none;
+        }
+
+        .resume-item {
+            padding: 15px;
+            background: #f8f9fb;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            border: 1px solid #e0e6f2;
+            transition: 0.3s;
+        }
+
+        .resume-item:hover {
+            border-color: #a9c1d8;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .resume-file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .resume-file-icon {
+            font-size: 24px;
+            color: #a9c1d8;
+        }
+
+        .resume-file-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .resume-file-delete {
+            color: #e74c3c;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 18px;
+        }
+
+        .resume-file-delete:hover {
+            color: #c0392b;
+        }
+
+        /* ================= CERTIFICATION ITEM ================= */
+        .certification-item {
+            padding: 20px;
+            background: #f8f9fb;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #a9c1d8;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .certification-item:hover {
+            background: #eef2f9;
+            border-left-color: #6d89ab;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .certification-content {
+            flex: 1;
+        }
+
+        .certification-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 5px;
+        }
+
+        .certification-issuer {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .certification-date {
+            font-size: 13px;
+            color: #999;
+        }
+
+        /* ================= FOOTER ================= */
+         footer {
+            width: 100%;
+            background: #ffffff;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 60px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            border-top: 1px solid #e0e6f2;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-links a,
+        .footer-links p {
+            color: #222;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-links a:hover,
+        .footer-links p:hover {
+            color: #6d89ab;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            width: 80px;
+        }
+
+        .footer-logo img {
+            height: auto;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .footer-logo-section p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            color: #6d89ab;
+            font-size: 20px;
+        }
+
+        .social-icons i {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .social-icons i:hover {
+            color: #87a6c4;
+            transform: scale(1.2);
+        }
+
+        /* ================= MODAL STYLES ================= */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e8ecf2;
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .modal-close {
+            font-size: 28px;
+            color: #999;
+            cursor: pointer;
+            transition: 0.3s;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #222;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e6f2;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: 0.3s;
+            color: #555;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #a9c1d8;
+            box-shadow: 0 0 10px rgba(169, 193, 216, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .modal-btn-cancel {
+            background: #f0f4f9;
+            color: #666;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #e0e6f2;
+            color: #222;
+        }
+
+        .modal-btn-save {
+            background: #a9c1d8;
+            color: #6d89ab;
+        }
+
+        .modal-btn-save:hover {
+            background: #87a6c4;
+            color: white;
+        }
+
+        /* ================= RESPONSIVE DESIGN ================= */
+        @media (max-width: 1200px) {
+            .profile-details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .logo-section {
+                width: 100%;
+                justify-content: space-between;
+                gap: 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .main-container {
+                padding: 25px 20px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+
+            .profile-details-grid {
+                justify-items: center;
+            }
+
+            .profile-sections-container {
+                padding: 25px;
+            }
+
+            footer {
+                flex-direction: column;
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                font-size: 14px;
+            }
+
+            .logo-section {
+                gap: 15px;
+            }
+
+            .main-container {
+                padding: 20px 15px;
+            }
+
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+
+            .profile-name {
+                font-size: 22px;
+            }
+
+            .profile-sections-container {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .modal-content {
+                padding: 25px;
+                max-width: 90%;
+            }
+
+            .logout-btn {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo-section">
+            <div class="logo">
+                 <a href="./empHomepage.html">
+                    <img src="hirelyLogo.png" alt="Hirely Logo">
+                </a>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li id="jobsBtn">
+                        Jobs
+                        <div class="dropdown-menu jobs-dropdown" id="jobsMenu">
+                            <div class="dropdown-column">
+                                <h4>Popular categories</h4>
+                                <p>IT jobs</p>
+                                <p>Data Science jobs</p>
+                                <p>HR jobs</p>
+                                <p>Engineering jobs</p>
+                                <p>Sales jobs</p>
+                                <p>Marketing jobs</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Jobs in demand</h4>
+                                <p>Fresher jobs</p>
+                                <p>Remote jobs</p>
+                                <p>Work from home jobs</p>
+                                <p>Walk in jobs</p>
+                                <p>Part-time jobs</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Jobs by location</h4>
+                                <p>Jobs in Pune</p>
+                                <p>Jobs in Bangalore</p>
+                                <p>Jobs in Mumbai</p>
+                                <p>Jobs in Delhi</p>
+                                <p>Jobs in Hyderabad</p>
+                                <p>Jobs in Chennai</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="companiesBtn">
+                        Companies
+                        <div class="dropdown-menu company-dropdown" id="companyMenu">
+                            <div class="dropdown-column">
+                                <h4>Explore categories</h4>
+                                <p>Startup</p>
+                                <p>Product based</p>
+                                <p>Internet</p>
+                                <p>MNC</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Explore collection</h4>
+                                <p>Top companies</p>
+                                <p>IT companies</p>
+                                <p>Sponsored companies</p>
+                                <p>Featured companies</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="auth-buttons" id="authButtons">
+            <!-- <button class="login-btn" onclick="handleLogin()">LOGIN</button> -->
+            <button class="signup-btn" onclick="handleSignup()"> LOGOUT</button>
+        </div>
+        <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display: none;">
+            LOGOUT <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <!-- PROFILE HEADER -->
+        <div class="profile-header">
+            <div class="profile-avatar">👤</div>
+            <div class="profile-header-content">
+                <h1 class="profile-name">John Doe</h1>
+                <p class="profile-updated">Profile Last Updated - 26 Feb, 2025</p>
+                <div class="profile-details-grid">
+                    <div class="profile-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span><span class="profile-detail-label">Location:</span> Ahmedabad, India</span>
+                    </div>
+                    <div class="profile-detail">
+                        <i class="fas fa-phone"></i>
+                        <span><span class="profile-detail-label">Phone:</span> +91 1234567890</span>
+                    </div>
+                    <div class="profile-detail">
+                        <i class="fas fa-briefcase"></i>
+                        <span><span class="profile-detail-label">Title:</span> Fresher</span>
+                    </div>
+                    <div class="profile-detail">
+                        <i class="fas fa-envelope"></i>
+                        <span><span class="profile-detail-label">Email:</span> johndoe123@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFILE SECTIONS -->
+        <div class="profile-sections-container">
+            <!-- SKILLS SECTION -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Skills</h2>
+                    <span class="add-btn" id="addSkillBtn">Add Skills</span>
+                </div>
+                <p class="section-description">Add your skills for which you are hunting for a job</p>
+                <div class="skills-container" id="skillsContainer">
+                    <div class="empty-state">
+                        No skills added yet
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROJECTS SECTION -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Projects</h2>
+                    <span class="add-btn" id="addProjectBtn">Add Project</span>
+                </div>
+                <p class="section-description">Stand out to employers by adding details about projects that you have done so far</p>
+                <div id="projectsContainer">
+                    <div class="empty-state">
+                        No projects added yet
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDUCATION SECTION -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Education</h2>
+                    <span class="add-btn" id="addEducationBtn">Add Education</span>
+                </div>
+                <p class="section-description">Add Education for better jobs opportunity</p>
+                <div id="educationContainer">
+                    <div class="empty-state">
+                        No education added yet
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESUME SECTION -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Upload CV / Resume</h2>
+                </div>
+                <p class="section-description">Looking for jobs requiring following skills :</p>
+                <div class="resume-upload-area" id="resumeUploadArea">
+                    <div class="resume-upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="resume-upload-text">Drag and drop or click to upload</div>
+                    <div class="resume-upload-hint">Supported formats: PDF, DOC, DOCX (Max 5MB)</div>
+                    <input type="file" class="resume-file-input" id="resumeInput" accept=".pdf,.doc,.docx" />
+                </div>
+                <div id="resumeContainer"></div>
+            </div>
+
+            <!-- CERTIFICATION SECTION -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Certifications</h2>
+                    <span class="add-btn" id="addCertificationBtn">Add Certifications</span>
+                </div>
+                <p class="section-description">Add details of certifications you have completed</p>
+                <div id="certificationsContainer">
+                    <div class="empty-state">
+                        No certifications added yet
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <!-- <footer>
+        <div class="footer-logo-section">
+            <div class="footer-logo">
+                <i class="fas fa-search" style="font-size: 32px; color: #6d89ab;"></i>
+            </div>
+            <p>About us</p>
+            <div class="social-icons">
+                <i class="fab fa-facebook"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-linkedin"></i>
+            </div>
+        </div>
+        <div class="footer-section">
+            <p class="footer-section-title">Company</p>
+            <div class="footer-links">
+                <a href="#">Contact us</a>
+                <a href="#">Privacy policy</a>
+                <a href="#">Terms & condition</a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <p class="footer-section-title">Support</p>
+            <div class="footer-links">
+                <a href="#">Help center</a>
+            </div>
+        </div>
+    </footer> -->
+
+        <footer>
+        <div class="footer-logo-section">
+            <div class="footer-logo">
+                <img src="hirelyLogo.png" alt="Hirely Logo">
+            </div>
+            <p>Connect with us</p>
+            <div class="social-icons">
+                <i class="fa-brands fa-facebook"></i>
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-linkedin"></i>
+            </div>
+        </div>
+        <div class="footer-links">
+            <a href="#">About us</a>
+            <a href="#">Contact us</a>
+            <a href="#">Terms & condition</a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy policy</a>
+            <a href="#">Help center</a>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+    <!-- Add Skill Modal -->
+    <div class="modal" id="skillModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Skill</h3>
+                <span class="modal-close" id="skillModalClose">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="skillInput">Skill Name</label>
+                <input type="text" id="skillInput" placeholder="Enter skill name (e.g., JavaScript, Python)">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" id="skillModalCancel">Cancel</button>
+                <button class="modal-btn modal-btn-save" id="skillModalSave">Add Skill</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Project</h3>
+                <span class="modal-close" id="projectModalClose">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="projectName">Project Name</label>
+                <input type="text" id="projectName" placeholder="Enter project name">
+            </div>
+            <div class="form-group">
+                <label for="projectDescription">Project Description</label>
+                <textarea id="projectDescription" placeholder="Describe your project in detail"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" id="projectModalCancel">Cancel</button>
+                <button class="modal-btn modal-btn-save" id="projectModalSave">Add Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Education Modal -->
+    <div class="modal" id="educationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Education</h3>
+                <span class="modal-close" id="educationModalClose">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="educationDegree">Degree/Certification</label>
+                <input type="text" id="educationDegree" placeholder="e.g., Bachelor of Technology">
+            </div>
+            <div class="form-group">
+                <label for="educationInstitute">Institute Name</label>
+                <input type="text" id="educationInstitute" placeholder="Enter institute name">
+            </div>
+            <div class="form-group">
+                <label for="educationYear">Year of Completion</label>
+                <input type="text" id="educationYear" placeholder="e.g., 2024">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" id="educationModalCancel">Cancel</button>
+                <button class="modal-btn modal-btn-save" id="educationModalSave">Add Education</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Certification Modal -->
+    <div class="modal" id="certificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Certification</h3>
+                <span class="modal-close" id="certificationModalClose">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="certificationName">Certification Name</label>
+                <input type="text" id="certificationName" placeholder="Enter certification name">
+            </div>
+            <div class="form-group">
+                <label for="certificationIssuer">Issuing Organization</label>
+                <input type="text" id="certificationIssuer" placeholder="Enter organization name">
+            </div>
+            <div class="form-group">
+                <label for="certificationDate">Issue Date</label>
+                <input type="text" id="certificationDate" placeholder="e.g., March 2024">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" id="certificationModalCancel">Cancel</button>
+                <button class="modal-btn modal-btn-save" id="certificationModalSave">Add Certification</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // ================= DROPDOWN MENU FUNCTIONALITY ================= 
+            // Toggle Jobs dropdown
+            $('#jobsBtn').on('click', function(e) {
+                e.stopPropagation();
+                $('#jobsMenu').toggleClass('show');
+                $('#companyMenu').removeClass('show');
+            });
+
+            // Toggle Companies dropdown
+            $('#companiesBtn').on('click', function(e) {
+                e.stopPropagation();
+                $('#companyMenu').toggleClass('show');
+                $('#jobsMenu').removeClass('show');
+            });
+
+            // Close dropdowns when clicking on menu items
+            $('.dropdown-column p').on('click', function(e) {
+                e.stopPropagation();
+                $('#jobsMenu').removeClass('show');
+                $('#companyMenu').removeClass('show');
+                var text = $(this).text();
+                console.log('Clicked on: ' + text);
+            });
+
+            // Close dropdowns when clicking outside
+            $(document).on('click', function() {
+                $('#jobsMenu').removeClass('show');
+                $('#companyMenu').removeClass('show');
+            });
+
+            // Prevent dropdown from closing when clicking inside it
+            $('.dropdown-menu').on('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // ========== MODAL FUNCTIONS ==========
+            function openModal(modalId) {
+                $(modalId).addClass('active');
+            }
+
+            function closeModal(modalId) {
+                $(modalId).removeClass('active');
+                $(modalId).find('input, textarea').val('');
+            }
+
+            // Close modal when clicking X
+            $('.modal-close').click(function () {
+                closeModal($(this).closest('.modal'));
+            });
+
+            // Close modal when clicking Cancel
+            $('.modal-btn-cancel').click(function () {
+                closeModal($(this).closest('.modal'));
+            });
+
+            // Close modal when clicking outside
+            $('.modal').click(function (event) {
+                if ($(event.target).is('.modal')) {
+                    closeModal(this);
+                }
+            });
+
+            // ========== SKILLS SECTION ==========
+            $('#addSkillBtn').click(function () {
+                openModal('#skillModal');
+            });
+
+            $('#skillModalSave').click(function () {
+                const skillName = $('#skillInput').val().trim();
+                if (skillName) {
+                    addSkill(skillName);
+                    closeModal('#skillModal');
+                    $('#skillInput').val('');
+                } else {
+                    alert('Please enter a skill name');
+                }
+            });
+
+            function addSkill(skillName) {
+                const skillsContainer = $('#skillsContainer');
+                if (skillsContainer.find('.empty-state').length) {
+                    skillsContainer.html('');
+                }
+                const skillElement = $(`
+                    <div class="skill-item">
+                        <span>${skillName}</span>
+                        <i class="fas fa-times" style="color: #e74c3c;"></i>
+                    </div>
+                `);
+                skillElement.find('i').click(function () {
+                    skillElement.fadeOut(300, function () {
+                        $(this).remove();
+                        if (skillsContainer.find('.skill-item').length === 0) {
+                            skillsContainer.html('<div class="empty-state">No skills added yet</div>');
+                        }
+                    });
+                });
+                skillsContainer.append(skillElement);
+            }
+
+            // ========== PROJECTS SECTION ==========
+            $('#addProjectBtn').click(function () {
+                openModal('#projectModal');
+            });
+
+            $('#projectModalSave').click(function () {
+                const projectName = $('#projectName').val().trim();
+                const projectDescription = $('#projectDescription').val().trim();
+                if (projectName && projectDescription) {
+                    addProject(projectName, projectDescription);
+                    closeModal('#projectModal');
+                } else {
+                    alert('Please fill in all fields');
+                }
+            });
+
+            function addProject(name, description) {
+                const projectsContainer = $('#projectsContainer');
+                if (projectsContainer.find('.empty-state').length) {
+                    projectsContainer.html('');
+                }
+                const projectElement = $(`
+                    <div class="project-item">
+                        <div class="project-name">${name}</div>
+                        <div class="project-description">${description}</div>
+                    </div>
+                `);
+                projectsContainer.append(projectElement);
+            }
+
+            // ========== EDUCATION SECTION ==========
+            $('#addEducationBtn').click(function () {
+                openModal('#educationModal');
+            });
+
+            $('#educationModalSave').click(function () {
+                const degree = $('#educationDegree').val().trim();
+                const institute = $('#educationInstitute').val().trim();
+                const year = $('#educationYear').val().trim();
+                if (degree && institute && year) {
+                    addEducation(degree, institute, year);
+                    closeModal('#educationModal');
+                } else {
+                    alert('Please fill in all fields');
+                }
+            });
+
+            function addEducation(degree, institute, year) {
+                const educationContainer = $('#educationContainer');
+                if (educationContainer.find('.empty-state').length) {
+                    educationContainer.html('');
+                }
+                const educationElement = $(`
+                    <div class="education-item">
+                        <div class="education-degree">${degree}</div>
+                        <div class="education-institute">${institute}</div>
+                        <div class="education-year">${year}</div>
+                    </div>
+                `);
+                educationContainer.append(educationElement);
+            }
+
+            // ========== RESUME UPLOAD SECTION ==========
+            $('#resumeUploadArea').click(function () {
+                $('#resumeInput').click();
+            });
+
+            // Drag and drop functionality
+            $('#resumeUploadArea').on('dragover', function (e) {
+                e.preventDefault();
+                $(this).css('border-color', '#6d89ab').css('background', '#f8f9fb');
+            });
+
+            $('#resumeUploadArea').on('dragleave', function () {
+                $(this).css('border-color', '#a9c1d8').css('background', 'white');
+            });
+
+            $('#resumeUploadArea').on('drop', function (e) {
+                e.preventDefault();
+                $(this).css('border-color', '#a9c1d8').css('background', 'white');
+                const files = e.originalEvent.dataTransfer.files;
+                if (files.length > 0) {
+                    handleResumeFile(files[0]);
+                }
+            });
+
+            $('#resumeInput').change(function () {
+                if (this.files.length > 0) {
+                    handleResumeFile(this.files[0]);
+                }
+            });
+
+            function handleResumeFile(file) {
+                const resumeContainer = $('#resumeContainer');
+                resumeContainer.html('');
+                const resumeItem = $(`
+                    <div class="resume-item">
+                        <div class="resume-file-info">
+                            <i class="fas fa-file-pdf resume-file-icon"></i>
+                            <span class="resume-file-name">${file.name}</span>
+                        </div>
+                        <i class="fas fa-trash resume-file-delete"></i>
+                    </div>
+                `);
+                resumeItem.find('.resume-file-delete').click(function () {
+                    resumeItem.fadeOut(300, function () {
+                        $(this).remove();
+                    });
+                    $('#resumeInput').val('');
+                });
+                resumeContainer.append(resumeItem);
+            }
+
+            // ========== CERTIFICATION SECTION ==========
+            $('#addCertificationBtn').click(function () {
+                openModal('#certificationModal');
+            });
+
+            $('#certificationModalSave').click(function () {
+                const name = $('#certificationName').val().trim();
+                const issuer = $('#certificationIssuer').val().trim();
+                const date = $('#certificationDate').val().trim();
+                if (name && issuer && date) {
+                    addCertification(name, issuer, date);
+                    closeModal('#certificationModal');
+                } else {
+                    alert('Please fill in all fields');
+                }
+            });
+
+            function addCertification(name, issuer, date) {
+                const certificationsContainer = $('#certificationsContainer');
+                if (certificationsContainer.find('.empty-state').length) {
+                    certificationsContainer.html('');
+                }
+                const certificationElement = $(`
+                    <div class="certification-item">
+                        <div class="certification-content">
+                            <div class="certification-name">${name}</div>
+                            <div class="certification-issuer">${issuer}</div>
+                            <div class="certification-date">${date}</div>
+                        </div>
+                    </div>
+                `);
+                certificationsContainer.append(certificationElement);
+            }
+
+            // ========== NAVIGATION ==========
+            $('.nav-links li').click(function () {
+                $('.nav-links li').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            // ========== LOGOUT ==========
+            $('.logout-btn').click(function () {
+                if (confirm('Are you sure you want to logout?')) {
+                    // Redirect to login page
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
