@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Shruti Patel</h1>
+            <ul class="flex gap-6">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section id="home" class="py-20 text-center">
+        <h1 class="text-5xl font-bold mb-4">
+            Hi, I'm Shruti Patel
+        </h1>
+        <p class="text-lg text-gray-700 mb-6">
+            Frontend Developer & UI/UX Learner
+        </p>
+        <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bgblue-800">
+            View Projects
+        </button>
+    </section>
+    <!-- About Section -->
+    <section id="about" class="bg-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-8">
+                About Me
+            </h2>
+            <p class="text-gray-700 leading-8">
+                I am passionate about frontend development and modern UI design.
+                I enjoy building responsive websites using Tailwind CSS and ReactJS.
+            </p>
+        </div>
+    </section>
+    <!-- Skills Section -->
+    <section id="skills" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-10">
+                My Skills
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow text-center">
+                    HTML
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow text-center">
+                    CSS
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow text-center">
+                    Tailwind CSS
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow text-center">
+                    JavaScript
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Projects Section -->
+    <section id="projects" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-10">
+                My Projects
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Project Card 1 -->
+                <div class="bg-gray-100 p-4 rounded-lg shadow-lg">
+                    <img src="https://via.placeholder.com/300" class="rounded-lg mb-4">
+                    <h3 class="text-xl font-bold mb-2">
+                        Portfolio Website
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Responsive portfolio website using Tailwind CSS.
+                    </p>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bgblue-800">
+                        View Project
+                    </button>
+                </div>
+                <!-- Project Card 2 -->
+                <div class="bg-gray-100 p-4 rounded-lg shadow-lg">
+                    <img src="https://via.placeholder.com/300" class="rounded-lg mb-4">
+                    <h3 class="text-xl font-bold mb-2">
+                        Landing Page
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Modern responsive landing page design.
+                    </p>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bgblue-800">
+                        View Project
+                    </button>
+                </div>
+                <!-- Project Card 3 -->
+                <div class="bg-gray-100 p-4 rounded-lg shadow-lg">
+                    <img src="https://via.placeholder.com/300" class="rounded-lg mb-4">
+                    <h3 class="text-xl font-bold mb-2">
+                        Dashboard UI
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Dashboard interface using Tailwind CSS.
+                    </p>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bgblue-800">
+                        View Project
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section -->
+    <section id="contact" class="bg-gray-900 text-white py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">
+                Contact Me
+            </h2>
+            <form class="max-w-lg mx-auto space-y-4">
+                <input type="text" placeholder="Enter Name" class="w-full p-3 rounded-lg text-black">
+                <input type="email" placeholder="Enter Email" class="w-full p-3 rounded-lg text-black">
+                <textarea placeholder="Enter Message" class="w-full p-3 rounded-lg text-black"></textarea>
+                <button class="bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-800">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="bg-black text-white text-center p-4">
+        <p>
+            © 2026 Shruti Patel. All Rights Reserved.
+        </p>
+    </footer>
+</body>
+
+</html>
