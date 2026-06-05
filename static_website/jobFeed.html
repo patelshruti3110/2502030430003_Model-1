@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hirely - Recommended Job Feed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #edf1f7;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR STYLES ================= */
+        .navbar {
+            width: 100%;
+            height: auto;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 60px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+        }
+
+        .logo img {
+            height: auto;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links li,
+        .nav-links a {
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #222;
+            text-decoration: none;
+        }
+
+        .nav-links li:hover,
+        .nav-links a:hover {
+            color: #6d89ab;
+            transition: 0.3s;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            margin-top: 15px;
+            min-width: 800px;
+            z-index: 999;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu.show {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .dropdown-menu.show.company-dropdown {
+            grid-template-columns: repeat(2, 1fr);
+            min-width: 500px;
+        }
+
+        .dropdown-column h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #6d89ab;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dropdown-column p {
+            font-size: 15px;
+            font-weight: 500;
+            color: #222;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            padding-left: 0;
+        }
+
+        .dropdown-column p:hover {
+            color: #6d89ab;
+            padding-left: 8px;
+        }
+
+        .right-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-search-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #aac2d8;
+            border-radius: 25px;
+            padding: 5px 5px 5px 15px;
+            width: 250px;
+            background: #fff;
+        }
+
+        .nav-search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .nav-search-box input::placeholder {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .nav-search-box button {
+            background: #6d89ab;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .auth-buttons button {
+            padding: 12px 28px;
+            border-radius: 25px;
+            border: 1px solid #6d89ab;
+            background: #a9c1d8;
+            color: #6d89ab;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .auth-buttons button:hover {
+            transform: translateY(-2px);
+            background: #87a6c4;
+            color: #fff;
+        }
+
+        .logout-btn {
+            width: auto;
+            height: auto;
+            border-radius: 25px;
+            border: 1px solid #6d89ab;
+            background: #a9c1d8;
+            color: #6d89ab;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            background: #87a6c4;
+            color: #fff;
+        }
+
+        /* ================= MAIN CONTAINER ================= */
+        .container {
+            display: flex;
+            flex: 1;
+            gap: 30px;
+            padding: 35px 40px;
+        }
+
+        /* ================= SIDEBAR STYLES ================= */
+        .sidebar {
+            width: 280px;
+            background: #a9c1d8;
+            border-radius: 35px;
+            padding: 40px 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 130px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            padding: 15px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: #222;
+        }
+
+        .sidebar-menu a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .sidebar-menu li:hover,
+        .sidebar-menu li.active {
+            background: #87a6c4;
+            color: #fff;
+            transform: translateX(8px);
+        }
+
+        .sidebar-menu li i {
+            font-size: 18px;
+            min-width: 20px;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .main-content {
+            flex: 1;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #222;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* ================= JOB LIST CARDS ================= */
+        .jobs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+
+        .job-list-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+            position: relative;
+        }
+
+        .job-list-card:hover {
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .jl-main-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            padding-right: 20px;
+        }
+
+        .jl-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 2px;
+        }
+
+        .jl-company {
+            font-size: 14px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .jl-rating {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .jl-rating .star {
+            color: #ffc107;
+        }
+
+        .jl-details {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .jl-details span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .jl-desc {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .jl-desc i {
+            margin-top: 3px;
+        }
+
+        .jl-skills {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .jl-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100px;
+            flex-shrink: 0;
+        }
+
+        .jl-logo {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .jl-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .jl-save-btn {
+            background: #f4f7fb;
+            border: 1px solid #aac2d8;
+            color: #6d89ab;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .jl-save-btn:hover {
+            background: #6d89ab;
+            color: #fff;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            width: 100%;
+            background: #ffffff;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: auto;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            border-top: 1px solid #e0e6f2;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-links a,
+        .footer-links p {
+            color: #222;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-links a:hover,
+        .footer-links p:hover {
+            color: #6d89ab;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            width: 80px;
+        }
+
+        .footer-logo img {
+            height: auto;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .footer-logo-section p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            color: #6d89ab;
+            font-size: 20px;
+        }
+
+        .social-icons i {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .social-icons i:hover {
+            color: #87a6c4;
+            transform: scale(1.2);
+        }
+
+        /* ================= RESPONSIVE DESIGN ================= */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                display: flex;
+                position: static;
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .sidebar-menu li {
+                white-space: nowrap;
+                padding: 12px 18px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .logo-section {
+                width: 100%;
+                justify-content: space-between;
+                gap: 20px;
+            }
+
+            .right-nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .right-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-search-box {
+                width: 100%;
+            }
+
+            .logout-btn {
+                width: 100%;
+            }
+
+            .job-list-card {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .jl-right {
+                width: 100%;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .jl-details {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .jl-details > span:nth-child(even) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="logo-section">
+            <div class="logo">
+                <a href="./empHomepage.html">
+                    <img src="hirelyLogo.png" alt="Hirely Logo">
+                </a>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li id="jobsBtn">
+                        Jobs
+                        <div class="dropdown-menu jobs-dropdown" id="jobsMenu">
+                            <div class="dropdown-column">
+                                <h4>Popular categories</h4>
+                                <p>IT jobs</p>
+                                <p>Data Science jobs</p>
+                                <p>HR jobs</p>
+                                <p>Engineering jobs</p>
+                                <p>Sales jobs</p>
+                                <p>Marketing jobs</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Jobs in demand</h4>
+                                <p>Fresher jobs</p>
+                                <p>Remote jobs</p>
+                                <p>Work from home jobs</p>
+                                <p>Walk in jobs</p>
+                                <p>Part-time jobs</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Jobs by location</h4>
+                                <p>Jobs in Pune</p>
+                                <p>Jobs in Bangalore</p>
+                                <p>Jobs in Mumbai</p>
+                                <p>Jobs in Delhi</p>
+                                <p>Jobs in Hyderabad</p>
+                                <p>Jobs in Chennai</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="companiesBtn">
+                        Companies
+                        <div class="dropdown-menu company-dropdown" id="companyMenu">
+                            <div class="dropdown-column">
+                                <h4>Explore categories</h4>
+                                <p>Startup</p>
+                                <p>Product based</p>
+                                <p>Internet</p>
+                                <p>MNC</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Explore collection</h4>
+                                <p>Top companies</p>
+                                <p>IT companies</p>
+                                <p>Sponsored companies</p>
+                                <p>Featured companies</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="right-nav">
+            <div class="nav-search-box">
+                <input type="text" id="navSearch" placeholder="Search Jobs">
+                <button onclick="goToJobSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="auth-buttons" id="authButtons">
+                <button class="signup-btn" onclick="handleSignup()"> LOGOUT</button>
+            </div>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display: none;">
+                LOGOUT <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTAINER ================= -->
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="active">
+                    <a href="./jobFeed.html">
+                        <i class="fa-solid fa-briefcase"></i> Job Feed
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa-regular fa-bookmark"></i> Saved Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="./empDashboard&AppliedJobs.html">
+                        <i class="fa-regular fa-rectangle-list"></i> Applied Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="./empDashboard&AppliedJobs.html">
+                        <i class="fa-solid fa-border-all"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="./empProfilePage.html">
+                        <i class="fa-regular fa-user"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <h2 class="page-title">Recommended Jobs</h2>
+            
+            <div class="jobs-list">
+                
+                <!-- Job Card 1 -->
+                <a href="./spaceOJobDetail.html" style="text-decoration: none; color: inherit; display: block;">
+                <div class="job-list-card">
+                    <div class="jl-main-info">
+                        <h3 class="jl-title">AI Engineer</h3>
+                        <p class="jl-company">Space-O Technologies</p>
+                        <div class="jl-rating">
+                            <span class="star">★</span> 4.0 <span style="color: #ccc;">|</span> 77K+ reviews
+                        </div>
+                        <div class="jl-details">
+                            <span><i class="fa-solid fa-briefcase"></i> 3-5Yrs</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-indian-rupee-sign"></i> Not disclosed</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-location-dot"></i> Ahmedabad</span>
+                        </div>
+                        <div class="jl-desc">
+                            <i class="fa-regular fa-file-lines"></i> Experience with TensorFlow, PyTorch and Keras for AI model development. Proficient...
+                        </div>
+                        <div class="jl-skills">
+                            Machine learning . Consulting . Javascript . Data security . C++
+                        </div>
+                    </div>
+                    <div class="jl-right">
+                        <div class="jl-logo">
+                            <img src="https://dummyimage.com/100x100/000/fff&text=SPACE+O" alt="Space-O">
+                        </div>
+                        <button class="jl-save-btn" onclick="event.stopPropagation();">Save <i class="fa-regular fa-bookmark"></i></button>
+                    </div>
+                </div>
+                </a>
+
+                <!-- Job Card 2 -->
+                <div class="job-list-card">
+                    <div class="jl-main-info">
+                        <h3 class="jl-title">Hr Operations Associate</h3>
+                        <p class="jl-company">Microsoft</p>
+                        <div class="jl-rating">
+                            <span class="star">★</span> 4.5 <span style="color: #ccc;">|</span> 14.4K+ reviews
+                        </div>
+                        <div class="jl-details">
+                            <span><i class="fa-solid fa-briefcase"></i> 1-5Yrs</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-indian-rupee-sign"></i> ₹ 3.5-7.5 Lacs PA</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-location-dot"></i> Delhi</span>
+                        </div>
+                        <div class="jl-desc">
+                            <i class="fa-regular fa-file-lines"></i> HR Services delivery center team plays a pivotal role in improving the Candi...
+                        </div>
+                        <div class="jl-skills">
+                            Operations . HR Operation . HR . Onboarding . Hruti . Successfactor . Sap
+                        </div>
+                    </div>
+                    <div class="jl-right">
+                        <div class="jl-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft">
+                        </div>
+                        <button class="jl-save-btn">Save <i class="fa-regular fa-bookmark"></i></button>
+                    </div>
+                </div>
+
+                <!-- Job Card 3 -->
+                <div class="job-list-card">
+                    <div class="jl-main-info">
+                        <h3 class="jl-title">Workforce Services New Associate</h3>
+                        <p class="jl-company">Accenture</p>
+                        <div class="jl-rating">
+                            <span class="star">★</span> 3.9 <span style="color: #ccc;">|</span> 53.3K+ reviews
+                        </div>
+                        <div class="jl-details">
+                            <span><i class="fa-solid fa-briefcase"></i> 0-1Yrs</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-indian-rupee-sign"></i> Not disclosed</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-location-dot"></i> Mumbai</span>
+                        </div>
+                        <div class="jl-desc">
+                            <i class="fa-regular fa-file-lines"></i> Willing to work in 24*7 environment with rotational shifts and Week offs. Active pa...
+                        </div>
+                        <div class="jl-skills">
+                            Project Management . Agile . Workforce Management . Stress Analysis
+                        </div>
+                    </div>
+                    <div class="jl-right">
+                        <div class="jl-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/Accenture_logo.svg" alt="Accenture">
+                        </div>
+                        <button class="jl-save-btn">Save <i class="fa-regular fa-bookmark"></i></button>
+                    </div>
+                </div>
+
+                <!-- Job Card 4 -->
+                <div class="job-list-card">
+                    <div class="jl-main-info">
+                        <h3 class="jl-title">Senior Software Engineer</h3>
+                        <p class="jl-company">Atlassian</p>
+                        <div class="jl-rating">
+                            <span class="star">★</span> 3.9 <span style="color: #ccc;">|</span> 122+ reviews
+                        </div>
+                        <div class="jl-details">
+                            <span><i class="fa-solid fa-briefcase"></i> 9-13Yrs</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-indian-rupee-sign"></i> Not disclosed</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-location-dot"></i> Remote</span>
+                        </div>
+                        <div class="jl-desc">
+                            <i class="fa-regular fa-file-lines"></i> Your background. 6+ years of experience in Data/Software Engineering...
+                        </div>
+                        <div class="jl-skills">
+                            Backend . Operational excellence . SCALE . Agile . Monitoring
+                        </div>
+                    </div>
+                    <div class="jl-right">
+                        <div class="jl-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Atlassian_logo_%282017%29.svg" alt="Atlassian">
+                        </div>
+                        <button class="jl-save-btn">Save <i class="fa-regular fa-bookmark"></i></button>
+                    </div>
+                </div>
+
+                <!-- Job Card 5 -->
+                <div class="job-list-card">
+                    <div class="jl-main-info">
+                        <h3 class="jl-title">Data Specialist</h3>
+                        <p class="jl-company">Infosys</p>
+                        <div class="jl-rating">
+                            <span class="star">★</span> 3.6 <span style="color: #ccc;">|</span> 38.4K+ reviews
+                        </div>
+                        <div class="jl-details">
+                            <span><i class="fa-solid fa-briefcase"></i> 0-5 Yrs</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-indian-rupee-sign"></i> Not disclosed</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-location-dot"></i> Bengaluru</span>
+                        </div>
+                        <div class="jl-desc">
+                            <i class="fa-regular fa-file-lines"></i> Experience 5+ years in research, analysis, writing, reviewing and editing with an an...
+                        </div>
+                        <div class="jl-skills">
+                            Manager Technology . Technical Professional . Data Analytics . Agile
+                        </div>
+                    </div>
+                    <div class="jl-right">
+                        <div class="jl-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Infosys_logo.svg" alt="Infosys">
+                        </div>
+                        <button class="jl-save-btn">Save <i class="fa-regular fa-bookmark"></i></button>
+                    </div>
+                </div>
+
+                <!-- Job Card 6 -->
+                <div class="job-list-card">
+                    <div class="jl-main-info">
+                        <h3 class="jl-title">Software Development Engineer, Device OS</h3>
+                        <p class="jl-company">Amazon</p>
+                        <div class="jl-rating">
+                            <span class="star">★</span> 4.1 <span style="color: #ccc;">|</span> 24.8K+ reviews
+                        </div>
+                        <div class="jl-details">
+                            <span><i class="fa-solid fa-briefcase"></i> 0-7Yrs</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-indian-rupee-sign"></i> Not disclosed</span>
+                            <span style="color: #ccc;">|</span>
+                            <span><i class="fa-solid fa-location-dot"></i> Hyderabad</span>
+                        </div>
+                        <div class="jl-desc">
+                            <i class="fa-regular fa-file-lines"></i> Amazon is an Equal Opportunity Employer - Minority / Women / Disability / Vetera...
+                        </div>
+                        <div class="jl-skills">
+                            Programming . Manager Technology . Mentor . Management . Architectural design
+                        </div>
+                    </div>
+                    <div class="jl-right">
+                        <div class="jl-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
+                        </div>
+                        <button class="jl-save-btn">Save <i class="fa-regular fa-bookmark"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div class="footer-logo-section">
+            <div class="footer-logo">
+                <img src="hirelyLogo.png" alt="Hirely Logo">
+            </div>
+            <p>Connect with us</p>
+            <div class="social-icons">
+                <i class="fa-brands fa-facebook"></i>
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-linkedin"></i>
+            </div>
+        </div>
+        <div class="footer-links">
+            <a href="#">About us</a>
+            <a href="#">Contact us</a>
+            <a href="#">Terms & condition</a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy policy</a>
+            <a href="#">Help center</a>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // ================= DROPDOWN MENU FUNCTIONALITY =================
+            $('#jobsBtn').on('click', function (e) {
+                e.stopPropagation();
+                $('#jobsMenu').toggleClass('show');
+                $('#companyMenu').removeClass('show');
+            });
+
+            $('#companiesBtn').on('click', function (e) {
+                e.stopPropagation();
+                $('#companyMenu').toggleClass('show');
+                $('#jobsMenu').removeClass('show');
+            });
+
+            $(document).on('click', function () {
+                $('#jobsMenu').removeClass('show');
+                $('#companyMenu').removeClass('show');
+            });
+
+            // ================= SEARCH NAVIGATION =================
+            $('#navSearch').on('keypress', function (e) {
+                if (e.which === 13) {
+                    goToJobSearch();
+                }
+            });
+        });
+
+        function goToJobSearch() {
+            window.location.href = './jobSearch.html';
+        }
+
+        function handleLogout() {
+            sessionStorage.setItem('isLoggedIn', 'false');
+            alert('Logged out successfully!');
+        }
+    </script>
+</body>
+
+</html>

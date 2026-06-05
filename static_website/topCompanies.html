@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hirely - Top Companies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #edf1f7;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR STYLES ================= */
+        .navbar {
+            width: 100%;
+            height: auto;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 60px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+        }
+
+        .logo img {
+            height: auto;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links li,
+        .nav-links a {
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #222;
+            text-decoration: none;
+        }
+
+        .nav-links li:hover,
+        .nav-links a:hover {
+            color: #6d89ab;
+            transition: 0.3s;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            margin-top: 15px;
+            min-width: 800px;
+            z-index: 999;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu.show {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .dropdown-menu.show.company-dropdown {
+            grid-template-columns: repeat(2, 1fr);
+            min-width: 500px;
+        }
+
+        .dropdown-column h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #6d89ab;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dropdown-column p {
+            font-size: 15px;
+            font-weight: 500;
+            color: #222;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            padding-left: 0;
+        }
+
+        .dropdown-column p:hover {
+            color: #6d89ab;
+            padding-left: 8px;
+        }
+
+        .right-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-search-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #aac2d8;
+            border-radius: 25px;
+            padding: 5px 5px 5px 15px;
+            width: 250px;
+            background: #fff;
+        }
+
+        .nav-search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .nav-search-box input::placeholder {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .nav-search-box button {
+            background: #6d89ab;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .auth-buttons button {
+            padding: 12px 28px;
+            border-radius: 25px;
+            border: 1px solid #6d89ab;
+            background: #a9c1d8;
+            color: #6d89ab;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .auth-buttons button:hover {
+            transform: translateY(-2px);
+            background: #87a6c4;
+            color: #fff;
+        }
+
+        .logout-btn {
+            width: auto;
+            height: auto;
+            border-radius: 25px;
+            border: 1px solid #6d89ab;
+            background: #a9c1d8;
+            color: #6d89ab;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            background: #87a6c4;
+            color: #fff;
+        }
+
+        /* ================= MAIN CONTAINER ================= */
+        .container {
+            display: flex;
+            flex: 1;
+            gap: 30px;
+            padding: 35px 40px;
+        }
+
+        /* ================= SIDEBAR STYLES ================= */
+        .sidebar {
+            width: 280px;
+            background: #a9c1d8;
+            border-radius: 35px;
+            padding: 40px 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 130px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            padding: 15px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: #222;
+        }
+
+        .sidebar-menu a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .sidebar-menu li:hover,
+        .sidebar-menu li.active {
+            background: #87a6c4;
+            color: #fff;
+            transform: translateX(8px);
+        }
+
+        .sidebar-menu li i {
+            font-size: 18px;
+            min-width: 20px;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .main-content {
+            flex: 1;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #222;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        /* ================= TOP COMPANIES CARDS ================= */
+        .top-companies-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .top-company-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: 0.3s ease;
+            cursor: pointer;
+        }
+
+        .top-company-card:hover {
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .tc-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .tc-logo {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tc-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .tc-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tc-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .tc-rating {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .tc-rating .star {
+            color: #ffc107;
+        }
+
+        .tc-tags {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tc-tag {
+            font-size: 11px;
+            padding: 4px 14px;
+            border-radius: 15px;
+            border: 1px solid #aac2d8;
+            color: #6d89ab;
+            background: white;
+            font-weight: 500;
+        }
+
+        .tc-arrow {
+            color: #222;
+            font-size: 16px;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            width: 100%;
+            background: #ffffff;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: auto;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            border-top: 1px solid #e0e6f2;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-links a,
+        .footer-links p {
+            color: #222;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-links a:hover,
+        .footer-links p:hover {
+            color: #6d89ab;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            width: 80px;
+        }
+
+        .footer-logo img {
+            height: auto;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .footer-logo-section p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            color: #6d89ab;
+            font-size: 20px;
+        }
+
+        .social-icons i {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .social-icons i:hover {
+            color: #87a6c4;
+            transform: scale(1.2);
+        }
+
+        /* ================= RESPONSIVE DESIGN ================= */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                display: flex;
+                position: static;
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .sidebar-menu li {
+                white-space: nowrap;
+                padding: 12px 18px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .logo-section {
+                width: 100%;
+                justify-content: space-between;
+                gap: 20px;
+            }
+
+            .right-nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .top-companies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .right-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-search-box {
+                width: 100%;
+            }
+
+            .logout-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="logo-section">
+            <div class="logo">
+                <a href="./empHomepage.html">
+                    <img src="hirelyLogo.png" alt="Hirely Logo">
+                </a>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li id="jobsBtn">
+                        Jobs
+                        <div class="dropdown-menu jobs-dropdown" id="jobsMenu">
+                            <div class="dropdown-column">
+                                <h4>Popular categories</h4>
+                                <p>IT jobs</p>
+                                <p>Data Science jobs</p>
+                                <p>HR jobs</p>
+                                <p>Engineering jobs</p>
+                                <p>Sales jobs</p>
+                                <p>Marketing jobs</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Jobs in demand</h4>
+                                <p>Fresher jobs</p>
+                                <p>Remote jobs</p>
+                                <p>Work from home jobs</p>
+                                <p>Walk in jobs</p>
+                                <p>Part-time jobs</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Jobs by location</h4>
+                                <p>Jobs in Pune</p>
+                                <p>Jobs in Bangalore</p>
+                                <p>Jobs in Mumbai</p>
+                                <p>Jobs in Delhi</p>
+                                <p>Jobs in Hyderabad</p>
+                                <p>Jobs in Chennai</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="companiesBtn">
+                        Companies
+                        <div class="dropdown-menu company-dropdown" id="companyMenu">
+                            <div class="dropdown-column">
+                                <h4>Explore categories</h4>
+                                <p>Startup</p>
+                                <p>Product based</p>
+                                <p>Internet</p>
+                                <p>MNC</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Explore collection</h4>
+                                <p>Top companies</p>
+                                <p>IT companies</p>
+                                <p>Sponsored companies</p>
+                                <p>Featured companies</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="right-nav">
+            <div class="nav-search-box">
+                <input type="text" id="navSearch" placeholder="Search Jobs">
+                <button onclick="goToJobSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="auth-buttons" id="authButtons">
+                <button class="signup-btn" onclick="handleSignup()"> LOGOUT</button>
+            </div>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display: none;">
+                LOGOUT <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTAINER ================= -->
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="./empHomepage.html">
+                        <i class="fa-solid fa-briefcase"></i> Job Feed
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa-regular fa-bookmark"></i> Saved Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="./empDashboard&AppliedJobs.html">
+                        <i class="fa-regular fa-rectangle-list"></i> Applied Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="./empDashboard&AppliedJobs.html">
+                        <i class="fa-solid fa-border-all"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="./empProfilePage.html">
+                        <i class="fa-regular fa-user"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <h2 class="page-title">Top Companies</h2>
+            
+            <div class="top-companies-grid">
+                
+                <!-- Company 1 -->
+                <a href="./appleJobs.html" style="text-decoration: none; color: inherit; display: block;">
+                <div class="top-company-card">
+                    <div class="tc-left">
+                        <div class="tc-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
+                        </div>
+                        <div class="tc-info">
+                            <div class="tc-name">Apple</div>
+                            <div class="tc-rating">
+                                <span class="star">★</span> 4.7 <span style="color: #ccc;">|</span> 7K+ reviews
+                            </div>
+                            <div class="tc-tags">
+                                <span class="tc-tag">Foreign MNC</span>
+                                <span class="tc-tag">Internet</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+                </a>
+
+                <!-- Company 2 -->
+                <div class="top-company-card">
+                    <div class="tc-left">
+                        <div class="tc-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tata_Consultancy_Services_Logo.svg" alt="TCS">
+                        </div>
+                        <div class="tc-info">
+                            <div class="tc-name">Tata Consultancy Services</div>
+                            <div class="tc-rating">
+                                <span class="star">★</span> 4.3 <span style="color: #ccc;">|</span> 12.4K+ reviews
+                            </div>
+                            <div class="tc-tags">
+                                <span class="tc-tag">Indian MNC</span>
+                                <span class="tc-tag">B2B</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- Company 3 -->
+                <div class="top-company-card">
+                    <div class="tc-left">
+                        <div class="tc-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg" alt="Wipro">
+                        </div>
+                        <div class="tc-info">
+                            <div class="tc-name">Wipro</div>
+                            <div class="tc-rating">
+                                <span class="star">★</span> 4.4 <span style="color: #ccc;">|</span> 8.2K+ reviews
+                            </div>
+                            <div class="tc-tags">
+                                <span class="tc-tag">Product Based</span>
+                                <span class="tc-tag">Indian MNC</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- Company 4 -->
+                <div class="top-company-card">
+                    <div class="tc-left">
+                        <div class="tc-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/BLUEDART_Logo.png" alt="Blue Dart">
+                        </div>
+                        <div class="tc-info">
+                            <div class="tc-name">Blue Dart</div>
+                            <div class="tc-rating">
+                                <span class="star">★</span> 4.0 <span style="color: #ccc;">|</span> 2.2K+ reviews
+                            </div>
+                            <div class="tc-tags">
+                                <span class="tc-tag">Corporate</span>
+                                <span class="tc-tag">Public</span>
+                                <span class="tc-tag">B2B</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- Company 5 -->
+                <div class="top-company-card">
+                    <div class="tc-left">
+                        <div class="tc-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Dailyhunt_logo.png" alt="Dailyhunt">
+                        </div>
+                        <div class="tc-info">
+                            <div class="tc-name">Dailyhunt</div>
+                            <div class="tc-rating">
+                                <span class="star">★</span> 4.3 <span style="color: #ccc;">|</span> 2.7K+ reviews
+                            </div>
+                            <div class="tc-tags">
+                                <span class="tc-tag">Corporate</span>
+                                <span class="tc-tag">Private</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- Company 6 -->
+                <div class="top-company-card">
+                    <div class="tc-left">
+                        <div class="tc-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg" alt="Cognizant">
+                        </div>
+                        <div class="tc-info">
+                            <div class="tc-name">Cognizant</div>
+                            <div class="tc-rating">
+                                <span class="star">★</span> 3.8 <span style="color: #ccc;">|</span> 49.3K+ reviews
+                            </div>
+                            <div class="tc-tags">
+                                <span class="tc-tag">Design/MNC</span>
+                                <span class="tc-tag">Product</span>
+                                <span class="tc-tag">B2B</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- Company 7 -->
+                <div class="top-company-card">
+                    <div class="tc-left">
+                        <div class="tc-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/GitLab_logo.svg" alt="Gitlab">
+                        </div>
+                        <div class="tc-info">
+                            <div class="tc-name">Gitlab</div>
+                            <div class="tc-rating">
+                                <span class="star">★</span> 4.2 <span style="color: #ccc;">|</span> 280+ reviews
+                            </div>
+                            <div class="tc-tags">
+                                <span class="tc-tag">Product Based</span>
+                                <span class="tc-tag">Internet</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- Company 8 -->
+                <div class="top-company-card">
+                    <div class="tc-left">
+                        <div class="tc-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" alt="Samsung">
+                        </div>
+                        <div class="tc-info">
+                            <div class="tc-name">Samsung</div>
+                            <div class="tc-rating">
+                                <span class="star">★</span> 3.5 <span style="color: #ccc;">|</span> 7K+ reviews
+                            </div>
+                            <div class="tc-tags">
+                                <span class="tc-tag">Internet</span>
+                                <span class="tc-tag">Foreign MNC</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div class="footer-logo-section">
+            <div class="footer-logo">
+                <img src="hirelyLogo.png" alt="Hirely Logo">
+            </div>
+            <p>Connect with us</p>
+            <div class="social-icons">
+                <i class="fa-brands fa-facebook"></i>
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-linkedin"></i>
+            </div>
+        </div>
+        <div class="footer-links">
+            <a href="#">About us</a>
+            <a href="#">Contact us</a>
+            <a href="#">Terms & condition</a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy policy</a>
+            <a href="#">Help center</a>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // ================= DROPDOWN MENU FUNCTIONALITY =================
+            $('#jobsBtn').on('click', function (e) {
+                e.stopPropagation();
+                $('#jobsMenu').toggleClass('show');
+                $('#companyMenu').removeClass('show');
+            });
+
+            $('#companiesBtn').on('click', function (e) {
+                e.stopPropagation();
+                $('#companyMenu').toggleClass('show');
+                $('#jobsMenu').removeClass('show');
+            });
+
+            $(document).on('click', function () {
+                $('#jobsMenu').removeClass('show');
+                $('#companyMenu').removeClass('show');
+            });
+
+            // ================= SEARCH NAVIGATION =================
+            $('#navSearch').on('keypress', function (e) {
+                if (e.which === 13) {
+                    goToJobSearch();
+                }
+            });
+        });
+
+        function goToJobSearch() {
+            window.location.href = './jobSearch.html';
+        }
+
+        function handleLogout() {
+            sessionStorage.setItem('isLoggedIn', 'false');
+            alert('Logged out successfully!');
+        }
+    </script>
+</body>
+
+</html>

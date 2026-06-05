@@ -276,6 +276,50 @@
             padding-left: 8px;
         }
 
+        .right-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-search-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #aac2d8;
+            border-radius: 25px;
+            padding: 5px 5px 5px 15px;
+            width: 250px;
+            background: #fff;
+        }
+
+        .nav-search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .nav-search-box input::placeholder {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .nav-search-box button {
+            background: #6d89ab;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         /* ================= MAIN CONTAINER ================= */
         .main-container {
             flex: 1;
@@ -769,6 +813,11 @@
             .job-item-details {
                 flex-wrap: wrap;
             }
+
+            .right-nav {
+                width: 100%;
+                justify-content: space-between;
+            }
         }
 
         @media (max-width: 768px) {
@@ -832,6 +881,16 @@
 
             .filter-buttons {
                 flex-wrap: wrap;
+            }
+
+            .right-nav {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .nav-search-box {
+                width: 100%;
             }
 
             footer {
@@ -908,13 +967,19 @@
                 </ul>
             </nav>
         </div>
-        <div class="auth-buttons" id="authButtons">
-            <!-- <button class="login-btn" onclick="handleLogin()">LOGIN</button> -->
-            <button class="signup-btn" onclick="handleSignup()"> LOGOUT</button>
+        <div class="right-nav">
+            <div class="nav-search-box">
+                <input type="text" id="navSearch" placeholder="Search Jobs">
+                <button onclick="goToJobSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="auth-buttons" id="authButtons">
+                <!-- <button class="login-btn" onclick="handleLogin()">LOGIN</button> -->
+                <button class="signup-btn" onclick="handleSignup()"> LOGOUT</button>
+            </div>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display: none;">
+                LOGOUT <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
         </div>
-        <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display: none;">
-            LOGOUT <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
     </header>
 
     <!-- ================= MAIN CONTAINER ================= -->
@@ -1262,6 +1327,18 @@
                 // window.location.href = './homepageBeforeLogin.html';
             }
         }
+
+        function goToJobSearch() {
+            window.location.href = './jobSearch.html';
+        }
+
+        $(document).ready(function() {
+            document.getElementById('navSearch').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    goToJobSearch();
+                }
+            });
+        });
     </script>
 </body>
 

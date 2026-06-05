@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hirely - Job Detail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #edf1f7;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR STYLES ================= */
+        .navbar {
+            width: 100%;
+            height: auto;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 60px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+        }
+
+        .logo img {
+            height: auto;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links li,
+        .nav-links a {
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #222;
+            text-decoration: none;
+        }
+
+        .nav-links li:hover,
+        .nav-links a:hover {
+            color: #6d89ab;
+            transition: 0.3s;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            margin-top: 15px;
+            min-width: 800px;
+            z-index: 999;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu.show {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .dropdown-menu.show.company-dropdown {
+            grid-template-columns: repeat(2, 1fr);
+            min-width: 500px;
+        }
+
+        .dropdown-column h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #6d89ab;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dropdown-column p {
+            font-size: 15px;
+            font-weight: 500;
+            color: #222;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            padding-left: 0;
+        }
+
+        .dropdown-column p:hover {
+            color: #6d89ab;
+            padding-left: 8px;
+        }
+
+        .right-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-search-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #aac2d8;
+            border-radius: 25px;
+            padding: 5px 5px 5px 15px;
+            width: 250px;
+            background: #fff;
+        }
+
+        .nav-search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .nav-search-box input::placeholder {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .nav-search-box button {
+            background: #6d89ab;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .auth-buttons button {
+            padding: 12px 28px;
+            border-radius: 25px;
+            border: 1px solid #6d89ab;
+            background: #a9c1d8;
+            color: #6d89ab;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .auth-buttons button:hover {
+            transform: translateY(-2px);
+            background: #87a6c4;
+            color: #fff;
+        }
+
+        .logout-btn {
+            width: auto;
+            height: auto;
+            border-radius: 25px;
+            border: 1px solid #6d89ab;
+            background: #a9c1d8;
+            color: #6d89ab;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            background: #87a6c4;
+            color: #fff;
+        }
+
+        /* ================= MAIN CONTAINER ================= */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            padding: 35px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ================= JOB DETAIL CARDS ================= */
+        .jd-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 40px;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        /* Header Card */
+        .jd-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .jl-main-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            padding-right: 20px;
+        }
+
+        .jl-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 2px;
+        }
+
+        .jl-company {
+            font-size: 15px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .jl-rating {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .jl-rating .star {
+            color: #ffc107;
+        }
+
+        .jl-details {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 500;
+        }
+
+        .jl-details span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .jd-logo {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .jd-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .jd-divider {
+            border: none;
+            height: 1px;
+            background: #e0e6f2;
+            margin: 25px 0;
+        }
+
+        .jd-header-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .jd-stats {
+            font-size: 13px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .jd-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .jd-apply-btn, .jd-save-btn {
+            background: transparent;
+            border: 1px solid #aac2d8;
+            color: #6d89ab;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .jd-apply-btn:hover, .jd-save-btn:hover {
+            background: #f0f4f9;
+            color: #4a6a8c;
+            border-color: #87a6c4;
+        }
+
+        /* Job Description & About Cards */
+        .jd-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 20px;
+        }
+
+        .jd-sub-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 10px;
+            margin-top: 25px;
+        }
+
+        .jd-text p {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .jd-text ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 20px;
+        }
+
+        .jd-text li {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .jd-key-val p {
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #444;
+        }
+
+        .jd-key-val strong {
+            color: #222;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .jd-skills-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .tc-tag {
+            font-size: 12px;
+            padding: 5px 14px;
+            border-radius: 15px;
+            border: 1px solid #aac2d8;
+            color: #6d89ab;
+            background: white;
+            font-weight: 500;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            width: 100%;
+            background: #ffffff;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: auto;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            border-top: 1px solid #e0e6f2;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-links a,
+        .footer-links p {
+            color: #222;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-links a:hover,
+        .footer-links p:hover {
+            color: #6d89ab;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            width: 80px;
+        }
+
+        .footer-logo img {
+            height: auto;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .footer-logo-section p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            color: #6d89ab;
+            font-size: 20px;
+        }
+
+        .social-icons i {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .social-icons i:hover {
+            color: #87a6c4;
+            transform: scale(1.2);
+        }
+
+        /* ================= RESPONSIVE DESIGN ================= */
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .logo-section {
+                width: 100%;
+                justify-content: space-between;
+                gap: 20px;
+            }
+
+            .right-nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .right-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-search-box {
+                width: 100%;
+            }
+
+            .logout-btn {
+                width: 100%;
+            }
+
+            .jd-card {
+                padding: 20px;
+            }
+
+            .jd-header-top {
+                flex-direction: column-reverse;
+                gap: 15px;
+            }
+
+            .jd-logo {
+                align-self: flex-start;
+            }
+
+            .jd-header-bottom {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .jl-details {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .jl-details > span:nth-child(even) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="logo-section">
+            <div class="logo">
+                <a href="./empHomepage.html">
+                    <img src="hirelyLogo.png" alt="Hirely Logo">
+                </a>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li id="jobsBtn">
+                        Jobs
+                        <div class="dropdown-menu jobs-dropdown" id="jobsMenu">
+                            <div class="dropdown-column">
+                                <h4>Popular categories</h4>
+                                <p>IT jobs</p>
+                                <p>Data Science jobs</p>
+                                <p>HR jobs</p>
+                                <p>Engineering jobs</p>
+                                <p>Sales jobs</p>
+                                <p>Marketing jobs</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Jobs in demand</h4>
+                                <p>Fresher jobs</p>
+                                <p>Remote jobs</p>
+                                <p>Work from home jobs</p>
+                                <p>Walk in jobs</p>
+                                <p>Part-time jobs</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Jobs by location</h4>
+                                <p>Jobs in Pune</p>
+                                <p>Jobs in Bangalore</p>
+                                <p>Jobs in Mumbai</p>
+                                <p>Jobs in Delhi</p>
+                                <p>Jobs in Hyderabad</p>
+                                <p>Jobs in Chennai</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="companiesBtn">
+                        Companies
+                        <div class="dropdown-menu company-dropdown" id="companyMenu">
+                            <div class="dropdown-column">
+                                <h4>Explore categories</h4>
+                                <p>Startup</p>
+                                <p>Product based</p>
+                                <p>Internet</p>
+                                <p>MNC</p>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Explore collection</h4>
+                                <p>Top companies</p>
+                                <p>IT companies</p>
+                                <p>Sponsored companies</p>
+                                <p>Featured companies</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="right-nav">
+            <div class="nav-search-box">
+                <input type="text" id="navSearch" placeholder="Search Jobs">
+                <button onclick="goToJobSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="auth-buttons" id="authButtons">
+                <button class="signup-btn" onclick="handleSignup()"> LOGOUT</button>
+            </div>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display: none;">
+                LOGOUT <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTAINER ================= -->
+    <div class="container">
+        
+        <!-- HEADER CARD -->
+        <div class="jd-card">
+            <div class="jd-header-top">
+                <div class="jl-main-info">
+                    <h3 class="jl-title">Apple Store Online Systems Engineer - Linux DevOps</h3>
+                    <p class="jl-company">Apple</p>
+                    <div class="jl-rating">
+                        <span class="star">★</span> 4.7 <span style="color: #ccc;">|</span> 17K+ reviews
+                    </div>
+                    <div class="jl-details">
+                        <span><i class="fa-solid fa-briefcase"></i> 6-8Yrs</span>
+                        <span style="color: #ccc;">|</span>
+                        <span><i class="fa-solid fa-indian-rupee-sign"></i> Not disclosed</span>
+                        <span style="color: #ccc;">|</span>
+                        <span><i class="fa-solid fa-location-dot"></i> Hybrid - Hyderabad</span>
+                    </div>
+                </div>
+                <div class="jd-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
+                </div>
+            </div>
+            <hr class="jd-divider">
+            <div class="jd-header-bottom">
+                <div class="jd-stats">
+                    Applicants: 50 <span style="color: #ccc; margin: 0 5px;">|</span> Posted: 30+ days ago
+                </div>
+                <div class="jd-actions">
+                    <button class="jd-apply-btn" onclick="window.location.href='./empDashboard&AppliedJobs.html'">Apply</button>
+                    <button class="jd-save-btn">Save <i class="fa-regular fa-bookmark"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- JOB DESCRIPTION CARD -->
+        <div class="jd-card">
+            <h3 class="jd-card-title">Job description</h3>
+            <div class="jd-text">
+                <p>As a Systems Engineer on the Retail Business Intelligence team, you will be build, configure, and manage infrastructure that supports cloud applications, ensuring security, efficiency, redundancy, and optimal functionality.</p>
+                <p>You will be accountable for:</p>
+                <ul>
+                    <li>- Promoting a culture of continuous improvement.</li>
+                    <li>- Delivering secure and performant systems.</li>
+                    <li>- Influencing and implementing a technology roadmap and train peers on best practices.</li>
+                    <li>- Monitoring and maintaining cloud infrastructure and troubleshooting issues</li>
+                </ul>
+                <div class="jd-key-val">
+                    <p><strong>Role:</strong> DevOps Engineer</p>
+                    <p><strong>Industry Type:</strong> Consumer Electronics & Appliances</p>
+                    <p><strong>Department:</strong> Engineering - Software & QA</p>
+                    <p><strong>Employment Type:</strong> Full Time, Permanent</p>
+                    <p><strong>Role Category:</strong> DevOps</p>
+                </div>
+                
+                <h4 class="jd-sub-title">Education</h4>
+                <div class="jd-key-val">
+                    <p><strong>UG:</strong> B.Tech/B.E. in Any Specialization</p>
+                </div>
+
+                <h4 class="jd-sub-title">Key Skills</h4>
+                <div class="jd-skills-tags">
+                    <span class="tc-tag">Linux Virtual Machines</span>
+                    <span class="tc-tag">Java</span>
+                    <span class="tc-tag">Python</span>
+                    <span class="tc-tag">SQL</span>
+                    <span class="tc-tag">Linux</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABOUT COMPANY CARD -->
+        <div class="jd-card">
+            <h3 class="jd-card-title">About company</h3>
+            <div class="jd-text">
+                <p>Apple revolutionized personal technology with the introduction of the Macintosh in 1984. Today, Apple leads the world in innovation with iPhone, iPad, Mac, Apple Watch, and Apple TV. Apple's software platforms provide seamless experiences across all Apple devices and empower people with breakthrough services including the App Store, Apple Music, Apple Pay, iCloud, and Apple TV+.</p>
+                
+                <h4 class="jd-sub-title">Company Info</h4>
+                <p>Address: 1 Infinite Loop , Retail , Morocco</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div class="footer-logo-section">
+            <div class="footer-logo">
+                <img src="hirelyLogo.png" alt="Hirely Logo">
+            </div>
+            <p>Connect with us</p>
+            <div class="social-icons">
+                <i class="fa-brands fa-facebook"></i>
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-linkedin"></i>
+            </div>
+        </div>
+        <div class="footer-links">
+            <a href="#">About us</a>
+            <a href="#">Contact us</a>
+            <a href="#">Terms & condition</a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy policy</a>
+            <a href="#">Help center</a>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // ================= DROPDOWN MENU FUNCTIONALITY =================
+            $('#jobsBtn').on('click', function (e) {
+                e.stopPropagation();
+                $('#jobsMenu').toggleClass('show');
+                $('#companyMenu').removeClass('show');
+            });
+
+            $('#companiesBtn').on('click', function (e) {
+                e.stopPropagation();
+                $('#companyMenu').toggleClass('show');
+                $('#jobsMenu').removeClass('show');
+            });
+
+            $(document).on('click', function () {
+                $('#jobsMenu').removeClass('show');
+                $('#companyMenu').removeClass('show');
+            });
+
+            // ================= SEARCH NAVIGATION =================
+            $('#navSearch').on('keypress', function (e) {
+                if (e.which === 13) {
+                    goToJobSearch();
+                }
+            });
+        });
+
+        function goToJobSearch() {
+            window.location.href = './jobSearch.html';
+        }
+
+        function handleLogout() {
+            sessionStorage.setItem('isLoggedIn', 'false');
+            alert('Logged out successfully!');
+        }
+    </script>
+</body>
+
+</html>

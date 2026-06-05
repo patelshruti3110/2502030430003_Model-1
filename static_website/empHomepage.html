@@ -195,6 +195,12 @@
             padding-left: 8px;
         }
 
+        .right-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
         /* ================= MAIN CONTAINER ================= */
         .container {
             display: flex;
@@ -649,6 +655,11 @@
                 gap: 25px;
             }
 
+            .right-nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+
             .hero-section h1 {
                 font-size: 32px;
             }
@@ -694,6 +705,12 @@
             }
 
             .auth-buttons button {
+                width: 100%;
+            }
+
+            .right-nav {
+                flex-direction: column;
+                gap: 15px;
                 width: 100%;
             }
 
@@ -804,13 +821,15 @@
                 </ul>
             </nav>
         </div>
-        <div class="auth-buttons" id="authButtons">
-            <!-- <button class="login-btn" onclick="handleLogin()">LOGIN</button> -->
-            <button class="signup-btn" onclick="handleSignup()"> LOGOUT</button>
+        <div class="right-nav">
+            <div class="auth-buttons" id="authButtons">
+                <!-- <button class="login-btn" onclick="handleLogin()">LOGIN</button> -->
+                <button class="signup-btn" onclick="handleSignup()"> LOGOUT</button>
+            </div>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display: none;">
+                LOGOUT <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
         </div>
-        <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display: none;">
-            LOGOUT <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
     </header>
 
     <!-- ================= MAIN CONTAINER ================= -->
@@ -877,7 +896,7 @@
             <section>
                 <h2 class="section-title">
                     Recommended Jobs
-                    <a href="#" class="view-all">View all</a>
+                    <a href="./jobFeed.html" class="view-all">View all</a>
                 </h2>
                 <div class="jobs-grid">
                     <!-- Job Card 1 -->
@@ -958,7 +977,7 @@
             <section>
                 <h2 class="section-title">
                     Top Companies
-                    <a href="#" class="view-all">View all</a>
+                    <a href="./topCompanies.html" class="view-all">View all</a>
                 </h2>
                 <div class="company-cards-grid">
                     <!-- Company Card 1 -->
@@ -1229,6 +1248,10 @@
             const viewAllLinks = document.querySelectorAll('.view-all');
             viewAllLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        return;
+                    }
                     e.preventDefault();
                     console.log('View all clicked');
                     alert('Viewing all items in this category...');
