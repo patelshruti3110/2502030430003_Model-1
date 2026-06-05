@@ -1184,7 +1184,7 @@
         // Handle Signup
         function handleSignup() {
             alert('Redirecting to signup page...');
-            // window.location.href = './registration.html';
+            window.location.href = './registration.html';
         }
 
         // Handle Logout
@@ -1192,6 +1192,7 @@
             sessionStorage.setItem('isLoggedIn', 'false');
             alert('Logged out successfully!');
             checkLoginStatus();
+            window.location.href = './login.html';
         }
 
         // Sidebar menu active state

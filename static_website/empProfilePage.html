@@ -1539,6 +1539,16 @@
         function goToJobSearch() {
             window.location.href = './jobSearch.html';
         }
+
+        function handleLogout() {
+            sessionStorage.setItem('isLoggedIn', 'false');
+            alert('Logged out successfully!');
+            window.location.href = './login.html';
+        }
+
+        function handleSignup() {
+            window.location.href = './registration.html';
+        }
     </script>
 </body>
 
