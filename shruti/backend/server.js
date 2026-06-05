@@ -1,15 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ extended: true }));
 
 // MongoDB Connection
 mongoose
@@ -24,6 +23,7 @@ mongoose
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/portfolio', require('./routes/portfolioRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
+app.use('/api/resumes', require('./routes/resumeRoutes'));
 
 // Health Check Route
 app.get('/api/health', (req, res) => {

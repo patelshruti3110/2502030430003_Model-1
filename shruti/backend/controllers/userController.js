@@ -9,11 +9,21 @@ const generateToken = (id) => {
 // User Signup
 exports.signup = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const name = req.body.name?.trim();
+        const email = req.body.email?.trim().toLowerCase();
+        const { password } = req.body;
 
         // Validation
         if (!name || !email || !password) {
             return res.status(400).json({ message: 'Please provide all required fields' });
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return res.status(400).json({ message: 'Please provide a valid email address' });
+        }
+        if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
+            return res.status(400).json({
+                message: 'Password must be at least 8 characters and include one uppercase letter and one number',
+            });
         }
 
         // Check if user already exists
@@ -42,7 +52,8 @@ exports.signup = async (req, res) => {
 // User Login
 exports.login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const email = req.body.email?.trim().toLowerCase();
+        const { password } = req.body;
 
         // Validation
         if (!email || !password) {
@@ -77,7 +88,7 @@ exports.login = async (req, res) => {
 // Get User Profile
 exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.userId);
+        const user = await User.findById(req.userId).select('-password');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

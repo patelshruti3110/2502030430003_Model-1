@@ -1,95 +1,171 @@
-import Navbar from "../components/Navbar";
-import ProjectCard from "../components/ProjectCard";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
+import { useAuth } from "../context/AuthContext";
+import { portfolioAPI, projectAPI } from "../services/api";
+
+const samplePortfolio = {
+  fullName: "Your Name",
+  role: "Full Stack Developer",
+  about: "A polished portfolio preview will appear here after you create your profile and add projects.",
+  skills: "React, Node.js, MongoDB, UI Design",
+  email: "you@example.com",
+  location: "Your city",
+};
+
+const sampleProjects = [
+  {
+    _id: "sample-1",
+    title: "Portfolio Builder",
+    description: "A full-stack workspace for building portfolios, project libraries, and resumes.",
+    technologies: "React, Express, MongoDB",
+  },
+  {
+    _id: "sample-2",
+    title: "Resume Studio",
+    description: "A resume editor with professional templates, validation, and downloadable content.",
+    technologies: "React, CSS, REST API",
+  },
+];
 
 function Preview() {
-    const [portfolio, setPortfolio] = useState(null);
-    const [projects, setProjects] = useState([]);
+  const [portfolio, setPortfolio] = useState(samplePortfolio);
+  const [projects, setProjects] = useState(sampleProjects);
+  const [loading, setLoading] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            const fetchData = async () => {
-                try {
-                    const portfolioRes = await fetch("http://localhost:5000/api/portfolio/get", {
-                        headers: { "Authorization": `Bearer ${token}` },
-                    });
-                    const projectsRes = await fetch("http://localhost:5000/api/projects/get", {
-                        headers: { "Authorization": `Bearer ${token}` },
-                    });
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setPortfolio(samplePortfolio);
+      setProjects(sampleProjects);
+      return;
+    }
 
-                    if (portfolioRes.ok) {
-                        setPortfolio(await portfolioRes.json());
-                    }
-                    if (projectsRes.ok) {
-                        setProjects(await projectsRes.json());
-                    }
-                } catch (err) {
-                    console.error("Failed to load preview data", err);
-                }
-            };
-            fetchData();
+    async function fetchPreview() {
+      setLoading(true);
+      try {
+        const [portfolioResult, projectsResult] = await Promise.allSettled([
+          portfolioAPI.get(),
+          projectAPI.list(),
+        ]);
+
+        if (portfolioResult.status === "fulfilled") {
+          setPortfolio(portfolioResult.value.data);
         }
-    }, []);
 
-    return (
-        <div>
-            <Navbar />
-            <section style={{ textAlign: 'center', padding: '60px 30px', background: 'linear-gradient(135deg, #4f46e5 0%, #7e22ce 100%)' }}>
-                <h1 style={{ fontSize: '52px', marginBottom: '10px', fontWeight: '800' }}>
-                    {portfolio?.fullName || "Your Name"}
-                </h1>
-                <p style={{ fontSize: '24px', marginBottom: '15px', opacity: '0.95' }}>
-                    {portfolio?.role || "Developer"}
-                </p>
-                <p style={{ fontSize: '16px', maxWidth: '600px', margin: '0 auto', opacity: '0.9' }}>
-                    {portfolio?.about || "Build your professional portfolio"}
-                </p>
-                {portfolio?.email && (
-                    <p style={{ fontSize: '16px', marginTop: '15px' }}>
-                        📧 {portfolio.email}
-                    </p>
-                )}
-            </section>
+        if (projectsResult.status === "fulfilled" && projectsResult.value.data.length > 0) {
+          setProjects(projectsResult.value.data);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
 
-            {portfolio?.skills && (
-                <section style={{ padding: '60px 30px', background: '#0f172a' }}>
-                    <h2 style={{ fontSize: '32px', marginBottom: '30px', textAlign: 'center' }}>Skills</h2>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', justifyContent: 'center', maxWidth: '1000px', margin: '0 auto' }}>
-                        {portfolio.skills.split(',').map((skill, idx) => (
-                            <div key={idx} style={{
-                                background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-                                padding: '12px 24px',
-                                borderRadius: '8px',
-                                border: '1px solid rgba(79, 70, 229, 0.2)',
-                            }}>
-                                {skill.trim()}
-                            </div>
-                        ))}
-                    </div>
-                </section>
+    fetchPreview();
+  }, [isAuthenticated]);
+
+  const skills = portfolio.skills
+    ? portfolio.skills.split(",").map((skill) => skill.trim()).filter(Boolean)
+    : [];
+
+  return (
+    <div className="preview-page">
+      <section className="portfolio-hero">
+        <div className="portfolio-hero__inner">
+          <p className="page-kicker" style={{ color: "var(--color-primary-soft)" }}>
+            Portfolio preview
+          </p>
+          <h1>{portfolio.fullName}</h1>
+          <p style={{ fontSize: 22, marginBottom: 10 }}>{portfolio.role}</p>
+          <p>{portfolio.about}</p>
+          <div className="list-card__meta" style={{ marginTop: 18 }}>
+            {portfolio.email && <span className="chip">{portfolio.email}</span>}
+            {portfolio.location && <span className="chip">{portfolio.location}</span>}
+          </div>
+          <div style={{ display: "flex", gap: 10, marginTop: 24, flexWrap: "wrap" }}>
+            {isAuthenticated ? (
+              <>
+                <Button onClick={() => navigate("/portfolio-builder/edit")}>Edit Portfolio</Button>
+                <Button variant="secondary" onClick={() => navigate("/dashboard")}>Dashboard</Button>
+              </>
+            ) : (
+              <Button onClick={() => navigate("/signup")}>Create Your Portfolio</Button>
             )}
-
-            <section style={{ padding: '60px 30px' }}>
-                <h2 style={{ fontSize: '36px', marginBottom: '40px', textAlign: 'center' }}>Projects</h2>
-                {projects.length === 0 ? (
-                    <p style={{ textAlign: 'center', color: '#cbd5e1' }}>No projects to display yet.</p>
-                ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', maxWidth: '1200px', margin: '0 auto' }}>
-                        {projects.map((project) => (
-                            <ProjectCard
-                                key={project._id}
-                                image={project.imageUrl || "https://via.placeholder.com/400"}
-                                title={project.title}
-                                description={project.description}
-                                github={project.githubLink || "#"}
-                                demo={project.liveLink || "#"}
-                            />
-                        ))}
-                    </div>
-                )}
-            </section>
+          </div>
         </div>
-    );
+      </section>
+
+      {loading ? (
+        <section className="portfolio-section">
+          <div className="loader">
+            <span className="spinner" />
+            Loading preview...
+          </div>
+        </section>
+      ) : (
+        <>
+          {skills.length > 0 && (
+            <section className="portfolio-section">
+              <h2 className="section-heading">Skills</h2>
+              <div className="list-card__meta">
+                {skills.map((skill) => (
+                  <span key={skill} className="chip">{skill}</span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <section className="portfolio-section">
+            <div className="toolbar">
+              <div>
+                <h2 className="section-heading">Projects</h2>
+                <p className="page-subtitle">Selected work from the project library.</p>
+              </div>
+              {isAuthenticated && (
+                <Button variant="outline" onClick={() => navigate("/editor/project/new")}>
+                  Add Project
+                </Button>
+              )}
+            </div>
+
+            <div className="card-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+              {projects.map((project) => (
+                <article key={project._id} className="list-card">
+                  <div className="template-preview" style={{ height: 140, marginBottom: 16 }}>
+                    <span className="template-preview__hero" />
+                    <span className="template-preview__line" />
+                    <span className="template-preview__line short" />
+                  </div>
+                  <h3 className="list-card__title">{project.title}</h3>
+                  <p className="list-card__text">{project.description}</p>
+                  {project.technologies && (
+                    <div className="list-card__meta">
+                      {project.technologies.split(",").map((tech) => (
+                        <span key={tech.trim()} className="chip">{tech.trim()}</span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="list-card__meta">
+                    {project.githubLink && (
+                      <a className="button button--outline button--sm" href={project.githubLink} target="_blank" rel="noreferrer">
+                        GitHub
+                      </a>
+                    )}
+                    {project.liveLink && (
+                      <a className="button button--outline button--sm" href={project.liveLink} target="_blank" rel="noreferrer">
+                        Live Demo
+                      </a>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+    </div>
+  );
 }
+
 export default Preview;

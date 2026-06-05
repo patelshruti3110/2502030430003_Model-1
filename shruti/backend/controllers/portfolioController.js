@@ -3,7 +3,15 @@ const Portfolio = require('../models/Portfolio');
 // Create or Update Portfolio
 exports.createPortfolio = async (req, res) => {
     try {
-        const { fullName, role, about, skills, email, phone, location, githubLink, linkedinLink } = req.body;
+        const fullName = req.body.fullName?.trim();
+        const role = req.body.role?.trim();
+        const about = req.body.about?.trim();
+        const skills = req.body.skills?.trim();
+        const email = req.body.email?.trim();
+        const phone = req.body.phone?.trim();
+        const location = req.body.location?.trim();
+        const githubLink = req.body.githubLink?.trim();
+        const linkedinLink = req.body.linkedinLink?.trim();
         const userId = req.userId;
 
         // Validation
@@ -19,12 +27,12 @@ exports.createPortfolio = async (req, res) => {
             portfolio.fullName = fullName || portfolio.fullName;
             portfolio.role = role || portfolio.role;
             portfolio.about = about || portfolio.about;
-            portfolio.skills = skills || portfolio.skills;
-            portfolio.email = email || portfolio.email;
-            portfolio.phone = phone || portfolio.phone;
-            portfolio.location = location || portfolio.location;
-            portfolio.githubLink = githubLink || portfolio.githubLink;
-            portfolio.linkedinLink = linkedinLink || portfolio.linkedinLink;
+            portfolio.skills = skills !== undefined ? skills : portfolio.skills;
+            portfolio.email = email !== undefined ? email : portfolio.email;
+            portfolio.phone = phone !== undefined ? phone : portfolio.phone;
+            portfolio.location = location !== undefined ? location : portfolio.location;
+            portfolio.githubLink = githubLink !== undefined ? githubLink : portfolio.githubLink;
+            portfolio.linkedinLink = linkedinLink !== undefined ? linkedinLink : portfolio.linkedinLink;
             portfolio.updatedAt = Date.now();
 
             await portfolio.save();

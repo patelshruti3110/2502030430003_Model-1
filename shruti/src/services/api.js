@@ -1,49 +1,81 @@
-import axios from 'axios';
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
-const API_BASE_URL = 'http://localhost:5000/api';
+async function request(path, options = {}) {
+  const token = localStorage.getItem("token");
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
 
-// Create axios instance
-const axiosInstance = axios.create({
-    baseURL: API_BASE_URL,
-    timeout: 10000,
-});
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
-// Add token to headers
-axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers,
+  });
+  const data = await parseResponse(response);
 
-// User APIs
+  if (response.status === 401) {
+    window.dispatchEvent(new Event("auth-error"));
+  }
+
+  if (!response.ok) {
+    const error = new Error(data?.message || "Request failed");
+    error.response = { status: response.status, data };
+    throw error;
+  }
+
+  return { data, status: response.status };
+}
+
+async function parseResponse(response) {
+  const text = await response.text();
+  if (!text) return null;
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
+}
+
+function jsonOptions(method, data) {
+  return {
+    method,
+    body: JSON.stringify(data),
+  };
+}
+
 export const userAPI = {
-    signup: (data) => axiosInstance.post('/users/signup', data),
-    login: (data) => axiosInstance.post('/users/login', data),
-    getProfile: () => axiosInstance.get('/users/profile'),
+  signup: (data) => request("/users/signup", jsonOptions("POST", data)),
+  login: (data) => request("/users/login", jsonOptions("POST", data)),
+  profile: () => request("/users/profile"),
 };
 
-// Portfolio APIs
 export const portfolioAPI = {
-    create: (data) => axiosInstance.post('/portfolio/create', data),
-    get: () => axiosInstance.get('/portfolio/get'),
-    getByUserId: (userId) => axiosInstance.get(`/portfolio/user/${userId}`),
+  create: (data) => request("/portfolio/create", jsonOptions("POST", data)),
+  get: () => request("/portfolio/get"),
+  getByUserId: (userId) => request(`/portfolio/user/${userId}`),
 };
 
-// Project APIs
 export const projectAPI = {
-    add: (data) => axiosInstance.post('/projects/add', data),
-    get: () => axiosInstance.get('/projects/get'),
-    getAll: () => axiosInstance.get('/projects/all'),
-    getByUserId: (userId) => axiosInstance.get(`/projects/user/${userId}`),
-    update: (id, data) => axiosInstance.put(`/projects/${id}`, data),
-    delete: (id) => axiosInstance.delete(`/projects/${id}`),
+  create: (data) => request("/projects/add", jsonOptions("POST", data)),
+  list: () => request("/projects/get"),
+  get: (id) => request(`/projects/${id}`),
+  update: (id, data) => request(`/projects/${id}`, jsonOptions("PUT", data)),
+  delete: (id) => request(`/projects/${id}`, { method: "DELETE" }),
+  listAll: () => request("/projects/all"),
+  listByUserId: (userId) => request(`/projects/user/${userId}`),
 };
 
-export default axiosInstance;
+export const resumeAPI = {
+  create: (data) => request("/resumes", jsonOptions("POST", data)),
+  list: () => request("/resumes"),
+  get: (id) => request(`/resumes/${id}`),
+  update: (id, data) => request(`/resumes/${id}`, jsonOptions("PUT", data)),
+  delete: (id) => request(`/resumes/${id}`, { method: "DELETE" }),
+};
+
+export default request;
